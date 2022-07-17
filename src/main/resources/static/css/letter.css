@@ -1,0 +1,40 @@
+.main .nav .badge {
+	position: absolute;
+	top: -3px;
+	left: 85px;
+}
+
+/**
+by self start
+ */
+#chats {
+	/*left: 85px;*/
+	left: 60px;
+}
+
+#notifications {
+	/*left: 85px;*/
+	left: 85px;
+}
+
+#second-header {
+	/*display: inline;*/
+	/*float: right;*/
+	margin-left: 24px;
+}
+
+/**
+by self end
+ */
+
+
+.main .media .badge {
+	position: absolute;
+	top: 12px;
+	left: -3px;
+}
+
+.toast {
+	max-width: 100%;
+	width: 80%;
+}
