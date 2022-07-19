@@ -1,7 +1,10 @@
 package com.nowcoder.community.controller;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.nowcoder.community.Annotation.LoginRequired;
+import com.nowcoder.community.config.CloudinaryConfig;
 import com.nowcoder.community.entity.User;
+import com.nowcoder.community.service.CloudinaryService;
 import com.nowcoder.community.service.FollowService;
 import com.nowcoder.community.service.LikeService;
 import com.nowcoder.community.service.UserService;
@@ -25,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import com.cloudinary.*;
 
 @Controller
 @RequestMapping("/user")
@@ -53,6 +57,11 @@ public class UserController implements CommunityConstant {
     @Autowired
     private FollowService followService;
 
+//    @Autowired
+//    CloudinaryConfig cloudinaryConfig;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
@@ -76,22 +85,28 @@ public class UserController implements CommunityConstant {
 
         // 生成随机文件名
         fileName = CommunityUtil.generateUUID() + suffix;
-        // 确定文件存放的路径
-        File dest = new File(uploadPath + "/" + fileName);
-        try {
-            // 存储文件
-            headerImage.transferTo(dest);
-        } catch (IOException e) {
-            logger.error("上传文件失败: " + e.getMessage());
-            throw new RuntimeException("上传文件失败,服务器发生异常!", e);
-        }
+//        // 确定文件存放的路径
+//        File dest = new File(uploadPath + "/" + fileName);
+        fileName = "nowCoder/header/" + fileName;
+        String url = null;
+//        try {
+//            // 存储文件
+////            headerImage.transferTo(dest);
+////            File uploadedFile = convertMultiPartToFile(headerImage);
+////            cloudinaryConfig.uploader().upload(headerImage.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
+//            url = cloudinaryService.uploadFile(headerImage, ObjectUtils.asMap("public_id", fileName));
+//        } catch (IOException e) {
+//            logger.error("上传文件失败: " + e.getMessage());
+//            throw new RuntimeException("上传文件失败,服务器发生异常!", e);
+//        }
+        url = cloudinaryService.uploadFile(headerImage, ObjectUtils.asMap("public_id", fileName));
 
         // 更新当前用户的头像的路径(web访问路径)
         // http://localhost:8080/community/user/header/xxx.png
         User user = hostHolder.getUser();
-        String headerUrl = domain + contextPath + "/user/header/" + fileName;
-        userService.updateHeader(user.getId(), headerUrl);
-
+//        String headerUrl = domain + contextPath + "/user/header/" + fileName;
+//        userService.updateHeader(user.getId(), headerUrl);
+        userService.updateHeader(user.getId(), url);
         return "redirect:/index";
     }
 
