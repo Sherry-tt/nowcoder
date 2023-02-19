@@ -1,8 +1,7 @@
 package com.nowcoder.community.controller;
 
 import com.cloudinary.utils.ObjectUtils;
-import com.nowcoder.community.Annotation.LoginRequired;
-import com.nowcoder.community.config.CloudinaryConfig;
+import com.nowcoder.community.annotation.LoginRequired;
 import com.nowcoder.community.entity.User;
 import com.nowcoder.community.service.CloudinaryService;
 import com.nowcoder.community.service.FollowService;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import com.cloudinary.*;
 
 @Controller
 @RequestMapping("/user")
