@@ -50,7 +50,7 @@ public class ThreadPoolTests {
         }
     }
 
-    // 1.JDK普通线程池
+    // 1.JDK ordinary thread pool
     @Test
     public void testExecutorService() {
         Runnable task = new Runnable() {
@@ -67,7 +67,7 @@ public class ThreadPoolTests {
         sleep(10000);
     }
 
-    // 2.JDK定时任务线程池
+    // 2.JDK scheduled task thread pool
     @Test
     public void testScheduledExecutorService() {
         Runnable task = new Runnable() {
@@ -82,7 +82,7 @@ public class ThreadPoolTests {
         sleep(30000);
     }
 
-    // 3.Spring普通线程池
+    // 3.Spring common thread pool
     @Test
     public void testThreadPoolTaskExecutor() {
         Runnable task = new Runnable() {
@@ -99,7 +99,7 @@ public class ThreadPoolTests {
         sleep(10000);
     }
 
-    // 4.Spring定时任务线程池
+    // 4.Spring timing task thread pool
     @Test
     public void testThreadPoolTaskScheduler() {
         Runnable task = new Runnable() {
@@ -115,17 +115,6 @@ public class ThreadPoolTests {
         sleep(30000);
     }
 
-    // 5.Spring普通线程池(简化)
-//    @Test
-//    public void testThreadPoolTaskExecutorSimple() {
-//        for (int i = 0; i < 10; i++) {
-//            alphaService.execute1();
-//        }
-//
-//        sleep(10000);
-//    }
-
-    // 6.Spring定时任务线程池(简化)
     @Test
     public void testThreadPoolTaskSchedulerSimple() {
         sleep(30000);

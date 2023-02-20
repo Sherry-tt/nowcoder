@@ -33,7 +33,6 @@ public class MailTests {
 
         String content = templateEngine.process("/mail/demo", context);
         System.out.println(content);
-//        mailClient.sendMail("rtan9802@gmail.com", "TEST2", "content");
         mailClient.sendMail("rtan9802@gmail.com", "HTML", content);
     }
 }

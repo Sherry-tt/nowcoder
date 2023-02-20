@@ -21,8 +21,8 @@ public class KafkaTests {
 
     @Test
     public void testKafka() {
-        kafkaProducer.sendMessage("test", "你好");
-        kafkaProducer.sendMessage("test", "在吗");
+        kafkaProducer.sendMessage("test", "hi");
+        kafkaProducer.sendMessage("test", "hello");
 
         try {
             Thread.sleep(1000 * 10);

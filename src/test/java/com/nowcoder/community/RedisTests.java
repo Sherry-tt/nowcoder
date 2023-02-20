@@ -64,27 +64,11 @@ public class RedisTests {
     public void testSets() {
         String redisKey = "test:teachers";
 
-        redisTemplate.opsForSet().add(redisKey, "刘备", "关羽", "张飞", "赵云", "诸葛亮");
+        redisTemplate.opsForSet().add(redisKey, "a", "b", "c", "d", "e");
 
         System.out.println(redisTemplate.opsForSet().size(redisKey));
         System.out.println(redisTemplate.opsForSet().pop(redisKey));
         System.out.println(redisTemplate.opsForSet().members(redisKey));
-    }
-
-    @Test
-    public void testSortedSets() {
-        String redisKey = "test:students";
-
-        redisTemplate.opsForZSet().add(redisKey, "唐僧", 80);
-        redisTemplate.opsForZSet().add(redisKey, "悟空", 90);
-        redisTemplate.opsForZSet().add(redisKey, "八戒", 50);
-        redisTemplate.opsForZSet().add(redisKey, "沙僧", 70);
-        redisTemplate.opsForZSet().add(redisKey, "白龙马", 60);
-
-        System.out.println(redisTemplate.opsForZSet().zCard(redisKey));
-        System.out.println(redisTemplate.opsForZSet().score(redisKey, "八戒"));
-        System.out.println(redisTemplate.opsForZSet().reverseRank(redisKey, "八戒"));
-        System.out.println(redisTemplate.opsForZSet().reverseRange(redisKey, 0, 2));
     }
 
     @Test
@@ -96,7 +80,6 @@ public class RedisTests {
         redisTemplate.expire("test:students", 10, TimeUnit.SECONDS);
     }
 
-    // 批量发送命令,节约网络开销. (多次访问同一个key)
     @Test
     public void testBoundOperations() {
         String redisKey = "test:count";
@@ -109,7 +92,6 @@ public class RedisTests {
         System.out.println(operations.get());
     }
 
-    // 编程式事务
     @Test
     public void testTransaction() {
         Object result = redisTemplate.execute(new SessionCallback() {
@@ -117,7 +99,6 @@ public class RedisTests {
             public Object execute(RedisOperations redisOperations) throws DataAccessException {
                 String redisKey = "text:tx";
 
-                // 启用事务
                 redisOperations.multi();
                 redisOperations.opsForSet().add(redisKey, "zhangsan");
                 redisOperations.opsForSet().add(redisKey, "lisi");
@@ -125,14 +106,12 @@ public class RedisTests {
 
                 System.out.println(redisOperations.opsForSet().members(redisKey));
 
-                // 提交事务
                 return redisOperations.exec();
             }
         });
         System.out.println(result);
     }
 
-    // 统计20万个重复数据的独立总数.
     @Test
     public void testHyperLogLog() {
         String redisKey = "test:hll:01";
@@ -150,7 +129,6 @@ public class RedisTests {
         System.out.println(size);
     }
 
-    // 将3组数据合并, 再统计合并后的重复数据的独立总数.
     @Test
     public void testHyperLogLogUnion() {
         String redisKey2 = "test:hll:02";
@@ -175,22 +153,18 @@ public class RedisTests {
         System.out.println(size);
     }
 
-    // 统计一组数据的布尔值
     @Test
     public void testBitMap() {
         String redisKey = "test:bm:01";
 
-        // 记录
         redisTemplate.opsForValue().setBit(redisKey, 1, true);
         redisTemplate.opsForValue().setBit(redisKey, 4, true);
         redisTemplate.opsForValue().setBit(redisKey, 7, true);
 
-        // 查询
         System.out.println(redisTemplate.opsForValue().getBit(redisKey, 0));
         System.out.println(redisTemplate.opsForValue().getBit(redisKey, 1));
         System.out.println(redisTemplate.opsForValue().getBit(redisKey, 2));
 
-        // 统计
         Object obj = redisTemplate.execute(new RedisCallback() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
@@ -201,7 +175,6 @@ public class RedisTests {
         System.out.println(obj);
     }
 
-    // 统计3组数据的布尔值, 并对这3组数据做OR运算.
     @Test
     public void testBitMapOperation() {
         String redisKey2 = "test:bm:02";
@@ -239,6 +212,4 @@ public class RedisTests {
         System.out.println(redisTemplate.opsForValue().getBit(redisKey, 5));
         System.out.println(redisTemplate.opsForValue().getBit(redisKey, 6));
     }
-
-
 }

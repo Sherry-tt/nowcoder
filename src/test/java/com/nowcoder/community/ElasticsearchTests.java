@@ -81,7 +81,7 @@ public class ElasticsearchTests {
     @Test
     public void testSearchByRepository() {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery("互联网寒冬", "title", "content"))
+                .withQuery(QueryBuilders.multiMatchQuery("xx", "title", "content"))
                 .withSort(SortBuilders.fieldSort("type").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("score").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
@@ -90,9 +90,6 @@ public class ElasticsearchTests {
                         new HighlightBuilder.Field("title").preTags("<em>").postTags("</em>"),
                         new HighlightBuilder.Field("content").preTags("<em>").postTags("</em>")
                 ).build();
-
-        // elasticTemplate.queryForPage(searchQuery, class, SearchResultMapper)
-        // 底层获取得到了高亮显示的值, 但是没有返回.
 
         Page<DiscussPost> page = discussRepository.search(searchQuery);
         System.out.println(page.getTotalElements());
@@ -107,7 +104,7 @@ public class ElasticsearchTests {
     @Test
     public void testSearchByTemplate() {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery("互联网寒冬", "title", "content"))
+                .withQuery(QueryBuilders.multiMatchQuery("xx", "title", "content"))
                 .withSort(SortBuilders.fieldSort("type").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("score").order(SortOrder.DESC))
                 .withSort(SortBuilders.fieldSort("createTime").order(SortOrder.DESC))
