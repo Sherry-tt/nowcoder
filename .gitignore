@@ -40,3 +40,5 @@ logback-spring.xml
 /data/elasticsearch-7.17.4/
 /data/kafka_data/
 /data/log_data/
+
+.DS_Store
