@@ -36,17 +36,15 @@ public class DiscussPostService {
     @Value("${caffeine.posts.expire-seconds}")
     private int expireSeconds;
 
-    // Caffeine核心接口: Cache, LoadingCache, AsyncLoadingCache
-
-    // 帖子列表缓存
+    // Post List Cache
     private LoadingCache<String, List<DiscussPost>> postListCache;
 
-    // 帖子总数缓存
+    // Total number of posts cached
     private LoadingCache<Integer, Integer> postRowsCache;
 
     @PostConstruct
     public void init() {
-        // 初始化帖子列表缓存
+        // Initialize post list cache
         postListCache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
                 .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
@@ -55,24 +53,24 @@ public class DiscussPostService {
                     @Override
                     public List<DiscussPost> load(@NonNull String key) throws Exception {
                         if (key == null || key.length() == 0) {
-                            throw new IllegalArgumentException("参数错误!");
+                            throw new IllegalArgumentException("Parameter error!");
                         }
 
                         String[] params = key.split(":");
                         if (params == null || params.length != 2) {
-                            throw new IllegalArgumentException("参数错误!");
+                            throw new IllegalArgumentException("Parameter error!");
                         }
 
                         int offset = Integer.valueOf(params[0]);
                         int limit = Integer.valueOf(params[1]);
 
-                        // 二级缓存: Redis -> mysql
+                        // L2 cache: Redis -> mysql
 
                         logger.debug("load post list from DB.");
                         return discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
                     }
                 });
-        // 初始化帖子总数缓存
+        // Initialize the total number of posts cache
         postRowsCache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
                 .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
@@ -103,13 +101,13 @@ public class DiscussPostService {
 
     public int addDiscussPost(DiscussPost post) {
         if (post == null) {
-            throw new IllegalArgumentException("参数不能为空!");
+            throw new IllegalArgumentException("parameter cannot be empty!");
         }
 
-        // 转义HTML标记
+        // escape HTML tags
         post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
         post.setContent(HtmlUtils.htmlEscape(post.getContent()));
-        // 过滤敏感词
+        // filter sensitive words
         post.setTitle(sensitiveFilter.filter(post.getTitle()));
         post.setContent(sensitiveFilter.filter(post.getContent()));
 

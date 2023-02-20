@@ -43,11 +43,8 @@ public class UserService implements CommunityConstant {
     @Autowired
     private RedisTemplate redisTemplate;
 
-//    @Autowired
-//    private LoginTicketMapper loginTicketMapper;
 
     public User findUserById(int id) {
-//        return userMapper.selectById(id);
         User user = getCache(id);
         if (user == null) {
             user = initCache(id);
@@ -100,7 +97,6 @@ public class UserService implements CommunityConstant {
         user.setStatus(0);
         user.setActivationCode(CommunityUtil.generateUUID());
 
-        // user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         user.setHeaderUrl(String.format("https://ui-avatars.com/api/?name=%s&size=100&length=1&background=0D8ABC&color=fff",user.getUsername()));
         // https://ui-avatars.com/api/?name=John+Doe&length=1&size=100&font-size=0.8&background=0D8ABC&color=fff
         user.setCreateTime(new Date());
@@ -204,13 +200,13 @@ public class UserService implements CommunityConstant {
         return userMapper.selectByName(name);
     }
 
-    // 1.优先从缓存中取值
+    // 1.Get the value from the cache first
     private User getCache(int userId) {
         String redisKey = RedisKeyUtil.getUserKey(userId);
         return (User) redisTemplate.opsForValue().get(redisKey);
     }
 
-    // 2.取不到时初始化缓存数据
+    // 2.Initialize cached data when not available
     private User initCache(int userId) {
         User user = userMapper.selectById(userId);
         String redisKey = RedisKeyUtil.getUserKey(userId);
@@ -218,7 +214,7 @@ public class UserService implements CommunityConstant {
         return user;
     }
 
-    // 3.数据变更时清除缓存数据
+    // 3.Clear cached data when data changes
     private void clearCache(int userId) {
         String redisKey = RedisKeyUtil.getUserKey(userId);
         redisTemplate.delete(redisKey);

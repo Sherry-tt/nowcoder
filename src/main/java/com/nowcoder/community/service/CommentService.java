@@ -36,15 +36,15 @@ public class CommentService implements CommunityConstant {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public int addComment(Comment comment) {
         if(comment == null) {
-            throw new IllegalArgumentException("参数不能为空");
+            throw new IllegalArgumentException("parameter cannot be empty");
         }
 
-        // 添加评论
+        // add comment
         comment.setContent(HtmlUtils.htmlEscape(comment.getContent()));
         comment.setContent(sensitiveFilter.filter(comment.getContent()));
         int rows = commentMapper.insertComment(comment);
 
-        // 更新帖子评论数量
+        // Update post comment count
         if (comment.getEntityType() == ENTITY_TYPE_POST) {
             int count = commentMapper.selectCountByEntity(comment.getEntityType(), comment.getEntityId());
             discussPostService.updateCommentCount(comment.getEntityId(), count);

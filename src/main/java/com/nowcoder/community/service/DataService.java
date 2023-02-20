@@ -22,21 +22,20 @@ public class DataService {
     private RedisTemplate redisTemplate;
 
     private SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-//private SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
-    // 将指定的IP计入UV
+    // Count the specified IP into UV
     public void recordUV(String ip) {
         String redisKey = RedisKeyUtil.getUVKey(df.format(new Date()));
         redisTemplate.opsForHyperLogLog().add(redisKey, ip);
     }
 
-    // 统计指定日期范围内的UV
+    // Count the UVs within the specified date range
     public long calculateUV(Date start, Date end) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("参数不能为空!");
         }
 
-        // 整理该日期范围内的key
+        // Organize the keys in the date range
         List<String> keyList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(start);
@@ -46,27 +45,27 @@ public class DataService {
             calendar.add(Calendar.DATE, 1);
         }
 
-        // 合并这些数据
+        // merge data
         String redisKey = RedisKeyUtil.getUVKey(df.format(start), df.format(end));
         redisTemplate.opsForHyperLogLog().union(redisKey, keyList.toArray());
 
-        // 返回统计的结果
+        // Return the result of statistics
         return redisTemplate.opsForHyperLogLog().size(redisKey);
     }
 
-    // 将指定用户计入DAU
+    // Count designated users into DAU
     public void recordDAU(int userId) {
         String redisKey = RedisKeyUtil.getDAUKey(df.format(new Date()));
         redisTemplate.opsForValue().setBit(redisKey, userId, true);
     }
 
-    // 统计指定日期范围内的DAU
+    // Count DAU within the specified date range
     public long calculateDAU(Date start, Date end) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("参数不能为空!");
         }
 
-        // 整理该日期范围内的key
+        // Organize the keys in the date range
         List<byte[]> keyList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(start);
@@ -76,7 +75,7 @@ public class DataService {
             calendar.add(Calendar.DATE, 1);
         }
 
-        // 进行OR运算
+        // OR operation
         return (long) redisTemplate.execute(new RedisCallback() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {

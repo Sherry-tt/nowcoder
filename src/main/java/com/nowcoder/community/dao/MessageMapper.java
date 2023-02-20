@@ -8,37 +8,36 @@ import java.util.List;
 @Mapper
 public interface MessageMapper {
 
-    // 查询当前用户的会话列表，针对每个会话只返回一条最新数据
+    // Query the session list of the current user, and return only one piece of latest data for each session
     List<Message> selectConversations(int userId, int offset, int limit);
 
-    // 查询当前用户的会话数量
+    // Query the number of sessions of the current user
     int selectConversationCount(int userId);
 
-    // 查询某个会话所包含的私信列表
+    // Query the list of private messages contained in a session
     List<Message> selectLetters(String conversationId, int offset, int limit);
 
-    //查询某个会话所包含的私信数量
+    // Query the number of private messages contained in a session
     int selectLetterCount(String conversationId);
 
-    // 查询未读私信的数量
+    // Query the number of unread private messages
     int selectLetterUnreadCount(int userId, String conversationId);
 
-    // 新增消息
+    // new message
     int insertMessage(Message message);
 
-    //修改消息的状态
+    // Modify the status of the message
     int updateStatus(List<Integer> ids, int status);
 
-    // 查询某个主题下最新的通知
+    // Query the latest notifications under a topic
     Message selectLatestNotice(int userId, String topic);
 
-    // 查询某个主题所包含的通知数量
+    // Query the number of notifications contained in a topic
     int selectNoticeCount(int userId, String topic);
 
-    // 查询未读的通知的数量
+    // Query the number of unread notifications
     int selectNoticeUnreadCount(int userId, String topic);
 
-    // 查询某个主题所包含的通知列表
+    // Query the list of notifications contained in a topic
     List<Message> selectNotices(int userId, String topic, int offset, int limit);
-
 }

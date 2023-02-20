@@ -33,13 +33,13 @@ public class SensitiveFilter {
         ) {
             String keyword;
             while ((keyword = reader.readLine()) != null) {
-                // 添加到前缀树
+                // added to the prefix tree
                 this.addKeyword(keyword);
             }
 
         } catch (IOException e) {
             System.out.println("???");
-            logger.error("加载敏感词文件失败: " + e.getMessage());
+            logger.error("Failed to load sensitive word file: " + e.getMessage());
         }
 
     }
@@ -52,15 +52,15 @@ public class SensitiveFilter {
             TrieNode subNode = tempNode.getSubNode(c);
 
             if (subNode == null) {
-                // 初始化子节点
+                // Initialize child nodes
                 subNode = new TrieNode();
                 tempNode.addSubNode(c, subNode);
             }
 
-            // 指向子节点,进入下一轮循环
+            // Point to the child node and enter the next cycle
             tempNode = subNode;
 
-            // 设置结束标识
+            // Set end flag
             if (i == keyword.length() - 1) {
                 tempNode.setKeywordEnd(true);
             }
@@ -77,65 +77,65 @@ public class SensitiveFilter {
             return null;
         }
 
-        // 指针1
+        // pointer 1
         TrieNode tempNode = rootNode;
-        // 指针2
+        // pointer 2
         int begin = 0;
-        // 指针3
+        // pointer 3
         int position = 0;
-        // 结果
+        // result
         StringBuilder sb = new StringBuilder();
 
         while (begin < text.length()) {
             if (position < text.length()) {
                 char c = text.charAt(position);
 
-                // 跳过符号
+                // skip symbol
                 if (isSymbol(c)) {
-                    // 若指针1处于根节点,将此符号计入结果,让指针2向下走一步
+                    // If pointer 1 is at the root node, count this symbol into the result and let pointer 2 go down one step
                     if (tempNode == rootNode) {
                         sb.append(c);
                         begin++;
                     }
-                    // 无论符号在开头或中间,指针3都向下走一步
+                    // Regardless of whether the symbol is at the beginning or in the middle, pointer 3 is one step down
                     position++;
                     continue;
                 }
 
-                // 检查下级节点
+                // check subordinate nodes
                 tempNode = tempNode.getSubNode(c);
                 if (tempNode == null) {
-                    // 以begin开头的字符串不是敏感词
+                    // Strings starting with begin are not sensitive words
                     sb.append(text.charAt(begin));
-                    // 进入下一个位置
+                    // go to next position
                     position = ++begin;
-                    // 重新指向根节点
+                    // redirect to the root node
                     tempNode = rootNode;
                 } else if (tempNode.isKeywordEnd()) {
-                    // 发现敏感词,将begin~position字符串替换掉
+                    // If sensitive words are found, replace the begin~position string
                     sb.append(REPLACEMENT);
-                    // 进入下一个位置
+                    // go to next position
                     begin = ++position;
 
                 } else {
-                    // 检查下一个字符
+                    // check next character
                     position++;
                 }
             } else {
-                //position遍历越界仍未匹配到敏感词
-                // 将最后一批字符计入结果
+                //Position traverses out of bounds and still does not match sensitive words
+                // Count the last batch of characters into the result
                 sb.append(text.substring(begin));
                 position = ++begin;
-                // 重新指向根节点
+                // redirect to the root node
                 tempNode = rootNode;
             }
         }
         return sb.toString();
     }
 
-    // 判断是否为符号
+    // Determine whether it is a symbol
     private boolean isSymbol(Character c) {
-        // 0x2E80~0x9FFF 是东亚文字范围
+        // 0x2E80~0x9FFF is an East Asian script range
         return !CharUtils.isAsciiAlphanumeric(c) && (c < 0x2E80 || c > 0x9FFF);
     }
 
@@ -166,7 +166,5 @@ public class SensitiveFilter {
         public TrieNode getSubNode(Character c) {
             return subNodes.get(c);
         }
-
-
     }
 }

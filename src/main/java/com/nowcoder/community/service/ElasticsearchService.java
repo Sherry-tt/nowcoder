@@ -88,7 +88,7 @@ public class ElasticsearchService {
                     String commentCount = hit.getSourceAsMap().get("commentCount").toString();
                     post.setCommentCount(Integer.valueOf(commentCount));
 
-                    // 处理高亮显示的结果
+                    // Process highlighted results
                     HighlightField titleField = hit.getHighlightFields().get("title");
                     if (titleField != null) {
                         post.setTitle(titleField.getFragments()[0].toString());

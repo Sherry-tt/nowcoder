@@ -14,7 +14,7 @@ function like(btn, entityType, entityId, entityUserId, postId) {
                 $(btn).children("i").text(data.likeCount);
 
                 // location.reload();
-                $(btn).children("b").text(data.likeStatus==1?'已赞':"赞");
+                $(btn).children("b").text(data.likeStatus==1?'Liked':"Like");
 
 
             } else {
@@ -24,7 +24,7 @@ function like(btn, entityType, entityId, entityUserId, postId) {
     );
 }
 
-// 置顶
+// Top
 function setTop() {
     $.post(
         CONTEXT_PATH + "/discuss/top",
@@ -40,7 +40,7 @@ function setTop() {
     );
 }
 
-// 加精
+// Refined
 function setWonderful() {
     $.post(
         CONTEXT_PATH + "/discuss/wonderful",
@@ -56,7 +56,7 @@ function setWonderful() {
     );
 }
 
-// 删除
+// Delete
 function setDelete() {
     $.post(
         CONTEXT_PATH + "/discuss/delete",

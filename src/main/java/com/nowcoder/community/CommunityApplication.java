@@ -10,7 +10,7 @@ public class CommunityApplication {
 
 	@PostConstruct
 	public void init() {
-		// 解决netty启动冲突问题
+		// Solve the problem of netty startup conflict
 		// see Netty4Utils.setAvailableProcessors()
 		System.setProperty("es.set.netty.runtime.available.processors", "false");
 	}

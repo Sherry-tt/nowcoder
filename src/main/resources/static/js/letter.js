@@ -13,7 +13,7 @@ function send_letter() {
 		function(data) {
 			data = $.parseJSON(data);
 			if(data.code == 0) {
-				$("#hintBody").text("发送成功!");
+				$("#hintBody").text("Sent successfully!");
 			} else {
 				$("#hintBody").text(data.msg);
 			}
@@ -28,6 +28,5 @@ function send_letter() {
 }
 
 function delete_msg() {
-	// TODO 删除数据
 	$(this).parents(".media").remove();
 }

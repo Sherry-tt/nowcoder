@@ -28,62 +28,62 @@ public interface CommunityConstant {
     int REMEMBER_EXPIRED_SECONDS = 3600 * 24 * 30;
 
     /**
-     * 实体类型: 帖子
+     * Entity Type: Post
      */
     int ENTITY_TYPE_POST = 1;
 
     /**
-     * 实体类型: 评论
+     * Entity Type: Comment
      */
     int ENTITY_TYPE_COMMENT = 2;
 
     /**
-     * 实体类型: 用户
+     * Entity Type: User
      */
     int ENTITY_TYPE_USER = 3;
 
     /**
-     * 主题: 评论
+     * Subject: Comments
      */
     String TOPIC_COMMENT = "comment";
 
     /**
-     * 主题: 点赞
+     * Subject: like
      */
     String TOPIC_LIKE = "like";
 
     /**
-     * 主题: 关注
+     * Subject: follow
      */
     String TOPIC_FOLLOW = "follow";
 
     /**
-     * 主题: 发帖
+     * Subject: post
      */
     String TOPIC_PUBLISH = "publish";
 
     /**
-     * 主题: 删帖
+     * Subject: delete post
      */
     String TOPIC_DELETE = "delete";
 
     /**
-     * 系统用户ID
+     * System user ID
      */
     int SYSTEM_USER_ID = 1;
 
     /**
-     * 权限: 普通用户
+     * AUTHORITY: normal user
      */
     String AUTHORITY_USER = "user";
 
     /**
-     * 权限: 管理员
+     * AUTHORITY: admin
      */
     String AUTHORITY_ADMIN = "admin";
 
     /**
-     * 权限: 版主
+     * AUTHORITY: moderator
      */
     String AUTHORITY_MODERATOR = "moderator";
 }

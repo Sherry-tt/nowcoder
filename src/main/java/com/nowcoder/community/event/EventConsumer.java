@@ -37,18 +37,18 @@ public class EventConsumer implements CommunityConstant {
     @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
     public void handleCommentMessage(ConsumerRecord record) {
         if (record == null || record.value()==null) {
-            logger.error("消息内容为空");
+            logger.error("message content is empty");
             return;
         }
 
         Event event = JSONObject.parseObject(record.value().toString(), Event.class);
 
         if (event == null) {
-            logger.error("消息格式错误!");
+            logger.error("message format error!");
             return;
         }
 
-        // 发送站内通知
+        // Send in-site notifications
         Message message = new Message();
         message.setFromId(SYSTEM_USER_ID);
         message.setToId(event.getEntityUserId());
@@ -70,17 +70,17 @@ public class EventConsumer implements CommunityConstant {
         messageService.addMessage(message);
     }
 
-    // 消费发帖事件
+    // Post Event consume
     @KafkaListener(topics = {TOPIC_PUBLISH})
     public void handlePublishMessage(ConsumerRecord record) {
         if (record == null || record.value() == null) {
-            logger.error("消息的内容为空!");
+            logger.error("The content of the message is empty!");
             return;
         }
 
         Event event = JSONObject.parseObject(record.value().toString(), Event.class);
         if (event == null) {
-            logger.error("消息格式错误!");
+            logger.error("message format error!");
             return;
         }
 
@@ -88,17 +88,17 @@ public class EventConsumer implements CommunityConstant {
         elasticsearchService.saveDiscussPost(post);
     }
 
-    // 消费删帖事件
+    // Delete Post Event consume
     @KafkaListener(topics = {TOPIC_DELETE})
     public void handleDeleteMessage(ConsumerRecord record) {
         if (record == null || record.value() == null) {
-            logger.error("消息的内容为空!");
+            logger.error("The content of the message is empty!");
             return;
         }
 
         Event event = JSONObject.parseObject(record.value().toString(), Event.class);
         if (event == null) {
-            logger.error("消息格式错误!");
+            logger.error("message format error!");
             return;
         }
 
