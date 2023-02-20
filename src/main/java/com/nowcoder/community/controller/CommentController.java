@@ -44,7 +44,7 @@ public class CommentController implements CommunityConstant {
         comment.setCreateTime(new Date());
         commentService.addComment(comment);
 
-        // 触发评论事件
+        // trigger comment event
         Event event = new Event()
                 .setTopic(TOPIC_COMMENT)
                 .setUserId(hostHolder.getUser().getId())
@@ -61,7 +61,7 @@ public class CommentController implements CommunityConstant {
         eventProducer.fireEvent(event);
 
         if (comment.getEntityType() == ENTITY_TYPE_POST) {
-            // 触发发帖事件
+            // trigger post event
             event = new Event()
                     .setTopic(TOPIC_PUBLISH)
                     .setUserId(comment.getUserId())
@@ -72,8 +72,6 @@ public class CommentController implements CommunityConstant {
             String redisKey = RedisKeyUtil.getPostScoreKey();
             redisTemplate.opsForSet().add(redisKey, discussPostId);
         }
-
-
 
         return "redirect:/discuss/detail/" + discussPostId;
     }

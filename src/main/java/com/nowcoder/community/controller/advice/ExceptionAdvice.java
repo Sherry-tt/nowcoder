@@ -19,19 +19,19 @@ public class ExceptionAdvice {
 
     @ExceptionHandler({Exception.class})
     public void handleException(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        logger.error("服务器发生异常: " + e.getMessage());
+        logger.error("Server Exception: " + e.getMessage());
         for (StackTraceElement element : e.getStackTrace()) {
             logger.error(element.toString());
         }
-        // 判断请求方式
+        // request method
         String xRequestedWith = request.getHeader("x-requested-with");
-        // 异步请求(要返回json字符串）
+        // asynchronous request
         if ("XMLHttpRequest".equals(xRequestedWith)) {
             response.setContentType("application/plain;charset=utf-8");
             PrintWriter writer = response.getWriter();
-            writer.write(CommunityUtil.getJSONString(1, "服务器异常!"));
+            writer.write(CommunityUtil.getJSONString(1, "Server Exception!"));
         } else {
-            // 普通请求（重定向到错误页面）
+            // normal request
             response.sendRedirect(request.getContextPath() + "/error");
         }
     }

@@ -26,10 +26,10 @@ public class DatabaseEndpoint {
         try (
                 Connection conn = dataSource.getConnection();
         ) {
-            return CommunityUtil.getJSONString(0, "获取连接成功!");
+            return CommunityUtil.getJSONString(0, "Connection Success!");
         } catch (SQLException e) {
-            logger.error("获取连接失败:" + e.getMessage());
-            return CommunityUtil.getJSONString(1, "获取连接失败!");
+            logger.error("Connection Error:" + e.getMessage());
+            return CommunityUtil.getJSONString(1, "Connection Error!");
         }
     }
 

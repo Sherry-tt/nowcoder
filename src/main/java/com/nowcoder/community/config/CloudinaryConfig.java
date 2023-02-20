@@ -24,7 +24,6 @@ public class CloudinaryConfig {
 
     private Cloudinary cloudinary;
 
-
     @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary = null;
@@ -35,23 +34,4 @@ public class CloudinaryConfig {
         cloudinary = new Cloudinary(config);
         return cloudinary;
     }
-
-//    public CloudinaryConfig() {
-//        Cloudinary cloudinary = null;
-//        Map config = new HashMap();
-//        config.put("cloud_name", cloudName);
-//        config.put("api_key", apiKey);
-//        config.put("api_secret", apiSecret);
-//        cloudinary = new Cloudinary(config);
-//        return cloudinary;
-//    }
-
-//    public Map upload(Object file, Map options){
-//        try {
-//            return cloudinary.uploader().upload(file, options);
-//        }catch(IOException e) {
-//            e.printStackTrace();
-//            return null;
-//
-//        }
 }

@@ -62,7 +62,7 @@ public class LoginController implements CommunityConstant {
     public String register(Model model, User user) {
         Map<String, Object> map = userService.register(user);
         if (map == null || map.isEmpty()) {
-            model.addAttribute("msg", "注册成功,我们已经向您的邮箱发送了一封激活邮件,请尽快激活!");
+            model.addAttribute("msg", "An email has been sent to your email address containing an activation link. Please click on the link to activate your account.!");
             model.addAttribute("target", "/index");
             return "/site/operate-result";
         } else {
@@ -77,16 +77,16 @@ public class LoginController implements CommunityConstant {
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {
         int result = userService.activation(userId, code);
         if (result == ACTIVATION_SUCCESS) {
-//            model.addAttribute("msg", "激活成功,您的账号已经可以正常使用了!");
+//            model.addAttribute("msg", "The activation is successful!");
             model.addAttribute("msg", "Activation Complete!\n" +
                     "Your Account has been successfully activated. You can now log in using the username and password you chose during the registration.");
             model.addAttribute("target", "/login");
         } else if (result == ACTIVATION_REPEAT) {
-//            model.addAttribute("msg", "无效操作,该账号已经激活过了!");
+//            model.addAttribute("msg", "Invalid operation, the account has already been activated!");
             model.addAttribute("msg", "This invitation link isn't valid. Perhaps you already used it?");
             model.addAttribute("target", "/index");
         } else {
-//            model.addAttribute("msg", "激活失败,您提供的激活码不正确!");
+//            model.addAttribute("msg", "Activation failed, the activation code you provided is incorrect!");
             model.addAttribute("msg", "Invalid Activation Link!\n" +
                     "The system is unable to find a user with the given activation string. ");
             model.addAttribute("target", "/index");
@@ -103,13 +103,13 @@ public class LoginController implements CommunityConstant {
         // store verification code in session
 //        session.setAttribute("kaptcha", text);
 
-        // 验证码的归属
+        // Captcha
         String kaptchaOwner = CommunityUtil.generateUUID();
         Cookie cookie = new Cookie("kaptchaOwner", kaptchaOwner);
         cookie.setMaxAge(60);
         cookie.setPath(contextPath);
         response.addCookie(cookie);
-        // 将验证码存入Redis
+
         String redisKey = RedisKeyUtil.getKaptchaKey(kaptchaOwner);
         redisTemplate.opsForValue().set(redisKey, text, 60, TimeUnit.SECONDS);
 
@@ -119,7 +119,7 @@ public class LoginController implements CommunityConstant {
             OutputStream os = response.getOutputStream();
             ImageIO.write(image, "png", os);
         } catch (IOException e) {
-            logger.error("响应验证码失败:" + e.getMessage());
+            logger.error("Failed to load Captcha:" + e.getMessage());
         }
     }
 

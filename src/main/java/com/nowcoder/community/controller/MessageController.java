@@ -32,16 +32,16 @@ public class MessageController implements CommunityConstant {
     @Autowired
     private UserService userService;
 
-    // 私信列表
+    // private message list
     @RequestMapping(path = "/messages/list", method = RequestMethod.GET)
     public String getLetterList(Model model, Page page) {
         User user = hostHolder.getUser();
-        // 分页信息
+        // pagination information
         page.setLimit(5);
         page.setPath("/messages/list");
         page.setRows(messageService.findConversationCount(user.getId()));
 
-        // 会话列表
+        // conversation list
         List<Message> conversationList = messageService.findConversations(
                 user.getId(), page.getOffset(), page.getLimit());
         List<Map<String, Object>> conversations = new ArrayList<>();
@@ -60,7 +60,7 @@ public class MessageController implements CommunityConstant {
 
         model.addAttribute("conversations", conversations);
 
-        // 查询未读消息数量
+        // number of unread messages
         int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
         model.addAttribute("letterUnreadCount", letterUnreadCount);
         int noticeUnreadCount = messageService.findNoticeUnreadCount(user.getId(), null);
@@ -71,12 +71,12 @@ public class MessageController implements CommunityConstant {
 
     @RequestMapping(path = "/messages/detail/{conversationId}", method = RequestMethod.GET)
     public String getLetterDetail(@PathVariable("conversationId") String conversationId, Page page, Model model) {
-        // 分页信息
+        // pagination information
         page.setLimit(5);
         page.setPath("/messages/detail/" + conversationId);
         page.setRows(messageService.findLetterCount(conversationId));
 
-        // 私信列表
+        // private message list
         List<Message> letterList = messageService.findLetters(conversationId, page.getOffset(), page.getLimit());
         List<Map<String, Object>> letters = new ArrayList<>();
         if (letterList != null) {
@@ -93,12 +93,10 @@ public class MessageController implements CommunityConstant {
         }
         model.addAttribute("letters", letters);
 
-        // 私信目标
+        // message target
         model.addAttribute("target", getLetterTarget(conversationId));
 
-
-
-        // 设置已读
+        // set from unread to read
         List <Integer> ids = getLetterIds(letterList);
         if (!ids.isEmpty()) {
             messageService.readMessage(ids);
@@ -138,7 +136,7 @@ public class MessageController implements CommunityConstant {
     public String sendLetter(String toName, String content) {
         User target = userService.findUserByName(toName);
         if (target == null) {
-            return CommunityUtil.getJSONString(1, "目标用户不存在!");
+            return CommunityUtil.getJSONString(1, "User does not exist!");
         }
 
         Message message = new Message();
@@ -160,7 +158,7 @@ public class MessageController implements CommunityConstant {
     public String getNoticeList(Model model) {
         User user = hostHolder.getUser();
 
-        // 查询评论类通知
+        // comment notifications
         Message message = messageService.findLatestNotice(user.getId(), TOPIC_COMMENT);
 
 
@@ -185,7 +183,7 @@ public class MessageController implements CommunityConstant {
         }
 
 
-        // 查询点赞类通知
+        // like notifications
         message = messageService.findLatestNotice(user.getId(), TOPIC_LIKE);
         // messageVO = new HashMap<>();
         if (message != null) {
@@ -209,7 +207,7 @@ public class MessageController implements CommunityConstant {
         }
 
 
-        // 查询关注类通知
+        // following notifications
         message = messageService.findLatestNotice(user.getId(), TOPIC_FOLLOW);
 //        messageVO = new HashMap<>();
         if (message != null) {
@@ -231,8 +229,7 @@ public class MessageController implements CommunityConstant {
             model.addAttribute("followNotice", messageVO);
         }
 
-
-        // 查询未读消息数量
+        // the number of unread messages
         int letterUnreadCount = messageService.findLetterUnreadCount(user.getId(), null);
         model.addAttribute("letterUnreadCount", letterUnreadCount);
         int noticeUnreadCount = messageService.findNoticeUnreadCount(user.getId(), null);
@@ -254,16 +251,16 @@ public class MessageController implements CommunityConstant {
         if (noticeList != null) {
             for (Message notice : noticeList) {
                 Map<String, Object> map = new HashMap<>();
-                // 通知
+                // notifications
                 map.put("notice", notice);
-                // 内容
+                // content
                 String content = HtmlUtils.htmlUnescape(notice.getContent());
                 Map<String, Object> data = JSONObject.parseObject(content, HashMap.class);
                 map.put("user", userService.findUserById((Integer) data.get("userId")));
                 map.put("entityType", data.get("entityType"));
                 map.put("entityId", data.get("entityId"));
                 map.put("postId", data.get("postId"));
-                // 通知作者
+                // author
                 map.put("fromUser", userService.findUserById(notice.getFromId()));
 
                 noticeVoList.add(map);
@@ -271,7 +268,7 @@ public class MessageController implements CommunityConstant {
         }
         model.addAttribute("notices", noticeVoList);
 
-        // 设置已读
+        // set from unread to read
         List<Integer> ids = getLetterIds(noticeList);
         if (!ids.isEmpty()) {
             messageService.readMessage(ids);

@@ -16,13 +16,13 @@ public class DataController {
     @Autowired
     private DataService dataService;
 
-    // 统计页面
+    // page
     @RequestMapping(path = "/data", method = {RequestMethod.GET, RequestMethod.POST})
     public String getDataPage() {
         return "/site/admin/data";
     }
 
-    // 统计网站UV
+    // website UV
     @RequestMapping(path = "/data/uv", method = RequestMethod.POST)
     public String getUV(@DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
                         @DateTimeFormat(pattern = "yyyy-MM-dd") Date end, Model model) {
@@ -33,7 +33,7 @@ public class DataController {
         return "forward:/data";
     }
 
-    // 统计活跃用户
+    // count active users
     @RequestMapping(path = "/data/dau", method = RequestMethod.POST)
     public String getDAU(@DateTimeFormat(pattern = "yyyy-MM-dd") Date start,
                          @DateTimeFormat(pattern = "yyyy-MM-dd") Date end, Model model) {
