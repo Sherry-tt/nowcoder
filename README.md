@@ -1,6 +1,8 @@
 # NowCoder
 NowCoder is an Online Discussion Forum, which is a full stack  web application, where users can  discuss and post comments.
 
+<p align="center"><img src="pictures/tools.png" alt="Demo Picture"></p>
+
 ### Features
 * Register, sign in and sign out user account.
 * Create, delete and search posts, follow and unfollow
@@ -13,3 +15,4 @@ NowCoder is an Online Discussion Forum, which is a full stack  web application, 
 * <strong>Back-end: </strong>Java, SpringBoot, SpringMVC, Tomcat
 * <strong>Database: </strong>MySQL, Redis
 * <strong>MiddleWare: </strong>Kafka, Elasticsearch
+
